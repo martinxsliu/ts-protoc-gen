@@ -3,7 +3,6 @@ node_modules
 node-debug.log
 .idea/
 npm-debug*
-lib/
 **/mocha-report.json
 bazel-*
 protoc/
