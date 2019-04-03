@@ -1,8 +1,7 @@
 import {assert} from "chai";
-import {oneOfName, replaceProtoSuffix} from "../../src/util";
+import {oneOfName, replaceProtoSuffix, snakeToCamel} from "../../src/util";
 
 describe("util", () => {
-
   describe("replaceProtoSuffix", () => {
     [{
       in: "github.com/improbable-eng/ts-protoc-gen/test/proto/examplecom/enum_message.proto",
@@ -40,12 +39,29 @@ describe("util", () => {
     }, {
       in: "OneOfName",
       out: "Oneofname"
-    }].forEach(senario => {
-      it(`should map '${senario.in}' to '${senario.out}'`, () => {
-          const actual = oneOfName(senario.in);
-          assert.equal(actual, senario.out);
+    }].forEach(scenario => {
+      it(`should map '${scenario.in}' to '${scenario.out}'`, () => {
+          const actual = oneOfName(scenario.in);
+          assert.equal(actual, scenario.out);
       });
     });
   });
 
+  describe("snakeToCamel", () => {
+    [{
+      in: "foo_bar_baz",
+      out: "fooBarBaz",
+    }, {
+      in: "foo_bar__baz",
+      out: "fooBarBaz",
+    }, {
+      in: "foo_bar___baz",
+      out: "fooBarBaz",
+    }].forEach(scenario => {
+      it(`should map '${scenario.in}' to '${scenario.out}'`, () => {
+        const actual = snakeToCamel(scenario.in);
+        assert.equal(actual, scenario.out);
+      });
+    });
+  });
 });

@@ -5,9 +5,33 @@ export function filePathToPseudoNamespace(filePath: string): string {
 }
 
 export function snakeToCamel(str: string): string {
-  return str.replace(/(\_\w)/g, function(m) {
-    return m[1].toUpperCase();
-  });
+  // Replicates the JS compiler's ParseLowerUnderscore function.
+  // https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/compiler/js/js_generator.cc#L324
+  const words: string[] = [];
+  let running = "";
+  for (let i = 0; i < str.length; i++) {
+    if (str.charAt(i) === "_") {
+      if (running !== "") {
+        words.push(running);
+        running = "";
+      }
+    } else {
+      running += str.charAt(i).toLowerCase();
+    }
+  }
+  if (running !== "") {
+    words.push(running);
+  }
+
+  let result = "";
+  for (let i = 0; i < words.length; i++) {
+    let word = words[i];
+    if (i > 0) {
+      word = uppercaseFirst(word);
+    }
+    result += word;
+  }
+  return result;
 }
 
 export function uppercaseFirst(str: string): string {
